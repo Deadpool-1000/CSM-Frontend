@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="form-container">
+            <form #f="ngForm" (ngSubmit)="handleSubmit(f)">
+                <h2>Raise a new Ticket</h2>
+                <div class="form-text my-2">We are very sorry that you encountered issue with our product. Please fill the following form so that we can address your issue as soon as possible.</div>
+                <div class="mb-3">
+                    <label for="" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" ngModel required/>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="form-label">Description</label>
+                    <div class="form-text mb-2">Please feel free to include any product identification numbers. It makes it easier to resolve your issue faster.</div>
+                    <textarea type="text" class="form-control" name="description" cols="6" rows="6" ngModel required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Department</label>
+                    <select class="form-select" aria-label="Default select example" ngModel name="department" required>
+                        <option value="1">Sales</option>
+                        <option value="2">IT</option>
+                        <option value="3">QA</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width:100%" [disabled]="isLoading || !f.valid">
+                    <span *ngIf="!isLoading; else loading">Submit</span>
+                    <ng-template #loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">  Loading...</span>
+                    </ng-template>
+                </button>
+            </form>
+        </div>
+        </div>
+</div>

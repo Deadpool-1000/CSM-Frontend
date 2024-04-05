@@ -1,0 +1,20 @@
+<div class="my-3 container p-3">
+    <h1>Your Tickets:</h1>
+    <div class="d-flex justify-content-end mb-3 dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Filter by status<i class="bi bi-filter"></i></button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'raised'}">raised</a></li>
+            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'in_progress'}">In Progress</a></li>
+            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'closed'}">closed</a></li>
+        </ul>
+    </div>
+    <ng-container *ngIf="filteredTickets.length<=0 ; else displayTickets">
+        <div class="alert alert-info">
+            <h2>No tickets to display</h2>
+        </div>
+    </ng-container>
+    <ng-template #displayTickets>
+        <app-ticket-item *ngFor="let ticket of filteredTickets" [ticket]="ticket"></app-ticket-item>
+    </ng-template>
+    
+</div>

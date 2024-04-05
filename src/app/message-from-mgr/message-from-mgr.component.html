@@ -1,0 +1,22 @@
+<div class="container">
+    
+        <div class="form-container">
+            <h3>Add note to Helpdesk for ticket</h3>
+            <form #messageForm="ngForm" (ngSubmit)="handleSubmit(messageForm)">
+                <app-ticket-item [ticket]="ticket"></app-ticket-item>
+                <hr/>
+                <div class="mb-3">
+                    <label class="form-label fw-bolder">Message to Helpdesk</label>
+                    <textarea name="" id="" rows="6" class="form-control" ngModel required name="message_from_manager"></textarea>
+                </div>
+                <button class="btn btn-primary" [disabled]="isLoading || !messageForm.valid">
+                    <span *ngIf="!isLoading; else loading">Submit</span>
+                    <ng-template #loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">  Loading...</span>
+                    </ng-template>
+                </button>
+            </form>
+        </div>
+</div>
+

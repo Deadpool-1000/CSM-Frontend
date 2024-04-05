@@ -1,0 +1,13 @@
+.form-container {
+    width: 50%;
+    margin: 50px auto 20px auto;
+    border: 1px solid #d4e3ed;
+    background-color: #FFFFFF;
+    padding:30px;
+    box-shadow:5px 5px 5px 5px rgb(222, 220, 220) ;
+}
+
+
+.form-container button{
+    width: 100%;
+}

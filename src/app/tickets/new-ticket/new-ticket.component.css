@@ -1,0 +1,12 @@
+.form-container {
+    width: 35%;
+    margin: 20px auto 20px  auto;
+    border: 1px solid #d4e3ed;
+    background-color: #FFFFFF;
+    padding:30px;
+    box-shadow:5px 5px 5px 5px rgb(222, 220, 220) ;
+}
+
+input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
+    border: 1px solid red;
+}

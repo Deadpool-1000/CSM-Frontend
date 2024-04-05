@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row">
+        <div class="form-container">
+            <div class="logo-container mb-3">
+                <img src="../../../assets/logo.png" alt="" class="form-logo">
+            </div>
+            <div class="alert alert-danger" *ngIf="error.length!==0">
+                {{error}}
+            </div>
+            <form #f="ngForm" (ngSubmit)="handleSignup(f)">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="full-name"  placeholder="Full Name" ngModel required />
+                </div>
+                <div class="mb-3">
+                    <input type="email" class="form-control" name="email"  placeholder="Email" ngModel required email/>
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" name="password"  placeholder="Password" ngModel required pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"/>
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" name="confirm-password"  placeholder="Confirm Password" ngModel required pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"/>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="address-1"  placeholder="Address Line 1" ngModel required/>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="address-2"  placeholder="Address Line 2" ngModel required/>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="text" class="form-control" name="city"  placeholder="City" ngModel required/>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="pincode"  placeholder="pincode" ngModel required pattern="[0-9]{6}"/>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="phone-number" placeholder="Phone number" ngModel pattern="[6-9][0-9]{9}" />
+                    <div id="passwordHelpBlock" class="form-text">
+                        Your phone number must be of pattern: Country code followed by your phone number (eg.+9199020292xx)
+                    </div>
+                </div>
+                <p class="form-text"><a routerLink="/auth/login">Already a member?</a></p>
+                <button class="btn btn-primary" [disabled]="isLoading || !f.valid">
+                    <span *ngIf="!isLoading; else loading">Signup</span>
+                    <ng-template #loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only"> Loading...</span>
+                    </ng-template>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

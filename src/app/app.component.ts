@@ -1,10 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AuthService } from './services/auth.service';
+import { LoadingService } from './services/loading.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'csm_frontend';
+export class AppComponent implements OnInit , OnDestroy {
+  loadingServiceSubscription: Subscription;
+  isLoading: boolean;
+  constructor(private authService: AuthService, private loadingService: LoadingService){}
+
+  ngOnInit(): void {
+    this.loadingServiceSubscription = this.loadingService.isLoading.subscribe(
+      isLoading=>{
+        this.isLoading = isLoading;
+      } 
+    )
+    // Auto login from session storage
+    this.authService.autoLogin();
+
+  }
+
+  ngOnDestroy(): void {
+    console.log("Destroy");
+    this.authService.clearExpirationTimer();
+    this.loadingServiceSubscription.unsubscribe();
+  }
 }

@@ -1,0 +1,31 @@
+.form-container {
+    width: 35%;
+    margin: 50px auto;
+    margin-bottom: 10px;
+    border: 1px solid #d4e3ed;
+    background-color: #FFFFFF;
+    padding:30px;
+    box-shadow:5px 5px 5px 5px rgb(222, 220, 220) ;
+}
+
+.logo-container{
+    text-align: center;
+}
+
+.form-logo{
+    height: 100%;
+    width: 100%;
+    max-width: 200px;
+    max-height: 200px;
+}
+.form-container button{
+    width: 100%;
+}
+
+body{
+    background-color: #ECEFF1;
+}
+
+input.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
