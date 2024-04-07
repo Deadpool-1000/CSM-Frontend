@@ -9,11 +9,7 @@ import { DatePipe, NgIf } from '@angular/common';
   imports: [NgIf, DatePipe],
   standalone: true
 })
-export class MessageComponent implements OnInit{
+export class MessageComponent{
   @Input() title!: string 
   @Input() message!: MessageModel
-
-  ngOnInit(): void {
-    console.log(this.message);
-  }
 }

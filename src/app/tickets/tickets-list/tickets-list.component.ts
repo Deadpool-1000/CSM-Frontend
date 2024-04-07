@@ -11,7 +11,8 @@ import { TicketModel } from '../models/ticket.model';
 export class TicketsListComponent implements OnInit {
   tickets: TicketModel[] = [];
   filteredTickets: TicketModel[] = []
-  filterByStatus!: string
+  filterByStatus: string;
+  sortBy: 'asc' | 'dsc' = 'asc'
   constructor(private activatedRoute: ActivatedRoute){}
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(

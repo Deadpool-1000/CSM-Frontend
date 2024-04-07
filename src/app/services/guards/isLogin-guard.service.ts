@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "../auth.service";
 import { map, take } from "rxjs/operators";
 import { MessageService } from "primeng/api";
 

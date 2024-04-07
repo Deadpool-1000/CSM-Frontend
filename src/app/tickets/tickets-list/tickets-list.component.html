@@ -1,11 +1,16 @@
 <div class="my-3 container p-3">
     <h1>Your Tickets:</h1>
     <div class="d-flex justify-content-end mb-3 dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Filter by status<i class="bi bi-filter"></i></button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'raised'}">raised</a></li>
+        <button class="btn btn-secondary dropdown-toggle me-2" type="button" data-bs-toggle="dropdown">Filter by date <i class="bi bi-sort-down"></i></button>
+        <ul class="dropdown-menu" >
+            <li><a class="dropdown-item" (click)="sortBy='dsc'">Latest First</a></li>
+            <li><a class="dropdown-item" (click)="sortBy='asc'">Oldest First</a></li>
+        </ul>
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Filter by status <i class="bi bi-filter"></i></button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'raised'}">Raised</a></li>
             <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'in_progress'}">In Progress</a></li>
-            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'closed'}">closed</a></li>
+            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'closed'}">Closed</a></li>
         </ul>
     </div>
     <ng-container *ngIf="filteredTickets.length<=0 ; else displayTickets">
@@ -14,7 +19,7 @@
         </div>
     </ng-container>
     <ng-template #displayTickets>
-        <app-ticket-item *ngFor="let ticket of filteredTickets" [ticket]="ticket"></app-ticket-item>
+        <app-ticket-item *ngFor="let ticket of filteredTickets | orderBy: sortBy" [ticket]="ticket"></app-ticket-item>
     </ng-template>
     
 </div>

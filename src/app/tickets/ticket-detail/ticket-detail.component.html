@@ -1,79 +1,133 @@
 <div class="container my-2 p-3">
-    <div class="container mb-3">
+    <div class="mb-3">
         <h1>Ticket Details</h1>
         <hr>
-        <h2 class="title">Ticket #{{ticket.ticket_id}} <span class="badge" [ngClass]="{'bg-danger': ticket.status==='raised', 'bg-info': ticket.status==='in-progress', 'bg-dark': ticket.status==='closed'}">{{ticket.status}}</span></h2>
-        <p class="fw-light"> Raised on {{ticket.created_on | date}}</p>
+        <h3>
+            Ticket #{{ticket.ticket_id}}
+            <span class="badge rounded-pill"
+                [ngClass]="{'bg-danger': ticket.status==='raised', 'bg-info': ticket.status==='in-progress', 'bg-dark': ticket.status==='closed'}">{{ticket.status}}</span>
+            <span *ngIf="currentUser?.role === 'MANAGER'"
+                class="ms-2 rounded-pill badge bg-primary">{{ticket.department.dept_name}}</span>
+        </h3>
+        <p class="fw-light"> Raised on {{ticket.created_on | date: 'medium'}}</p>
+        <div class="row">
+            <div class="col-md-10">
+                <h5><span class="fw-bold">Title:</span> {{ticket.title}}</h5>
+                <h5><span class="fw-bold">Description:</span> {{ticket.description}}</h5>
+
+            </div>
+            <div class="col-md-2">
+                <img src="../../../assets/ticket.png" height="100" width="100%" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="accordion mb-3" id="detailAccordion">
+        <div class="accordion-item" *ngIf="currentUser && currentUser.role !== 'CUSTOMER' && ticket.customer">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#customerDetails"> Customer Details</button>
+                <div class="accordion-collapse collapse mb-3 p-0" id="customerDetails"
+                    data-bs-parent="#detailAccordion">
+                    <div class="accordion-body">
+                        <app-user-detail [user]="ticket.customer" role="Customer"></app-user-detail>
+                    </div>
+                </div>
+            </h2>
+        </div>
+        <div class="accordion-item" *ngIf="currentUser && currentUser.role !== 'EMPLOYEE' && ticket.helpdesk_assigned">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#helpdeskDetails"> Helpdesk Details</button>
+                <div class="accordion-collapse collapse mb-3 p-0" id="helpdeskDetails"
+                    data-bs-parent="#detailAccordion">
+                    <div class="accordion-body">
+                        <app-user-detail [user]="ticket.helpdesk_assigned" role="Helpdesk"></app-user-detail>
+                    </div>
+                </div>
+            </h2>
+        </div>
+        <div class="accordion-item" *ngIf="ticket.message_from_helpdesk">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#heldpeskMessage"> Message from helpdesk</button>
+                <div class="accordion-collapse collapse mb-3 p-0" id="heldpeskMessage"
+                    data-bs-parent="#detailAccordion">
+                    <div class="accordion-body">
+                        <app-message title="Message from helpdesk"
+                            [message]="ticket.message_from_helpdesk"></app-message>
+                    </div>
+                </div>
+            </h2>
+        </div>
+        <div class="accordion-item"
+            *ngIf="feedback && currentUser && (currentUser.role==='CUSTOMER' || currentUser.role === 'MANAGER')">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#feedback">
+                    Customer Feedback</button>
+                <div class="accordion-collapse collapse mb-3 p-0" id="feedback" data-bs-parent="#detailAccordion">
+                    <div class="accordion-body">
+                        <div class="card p-3">
+                            <div class="card-body">
+                                <h3 class="card-title" style="text-align:center">Feedback from customer</h3>
+                                <h6 class="card-subtitle mb-2 text-muted">{{feedback.created_on| date: 'medium'}}</h6>
+                                <hr />
+                                <p-rating [(ngModel)]="feedback.stars" [readonly]="true" [cancel]="false"></p-rating>
+                                <p style="font-size: medium;">{{feedback.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h2>
+        </div>
+        <div class="accordion-item" *ngIf="messageFromMgr">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#noteToHelpdesk">Note to Helpdesk by Manager</button>
+                <div class="accordion-collapse collapse mb-3 p-0" id="noteToHelpdesk"
+                    data-bs-parent="#detailAccordion">
+                    <div class="accordion-body">
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <h3 class="card-title" style="text-align:center">Note to helpdesk</h3>
+                                <h6 class="card-subtitle mb-2 text-muted">{{messageFromMgr.created_at| date: 'medium'}}</h6>
+                                <hr />
+                                <p class="card-text" style="font-size: medium;">{{messageFromMgr.message}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h2>
+        </div>
+    </div>
     
-        <h3><span class="fw-bold">Title:</span> {{ticket.title}}</h3>
-        <h4><span class="fw-bold">Description:</span> {{ticket.description}}</h4>
-    </div>
-    <div class="container mb-3 p-0" *ngIf="currentUser && currentUser.role !== 'CUSTOMER' && ticket.customer">
-        <app-user-detail [user]="ticket.customer" role="Customer"></app-user-detail>
-    </div>
-    <div class="container mb-3 p-0" *ngIf="currentUser && currentUser.role !== 'EMPLOYEE' && ticket.helpdesk_assigned">
-        <app-user-detail [user]="ticket.helpdesk_assigned" role="Helpdesk"></app-user-detail>
-    </div>
-    <div class="container mb-3" *ngIf="ticket.message_from_helpdesk">
-        <app-message  title="Message from helpdesk" [message]="ticket.message_from_helpdesk"></app-message>
-    </div>
-    <div class="my-3">
-        <ng-container *ngIf="currentUser?.role==='CUSTOMER'">
-            <div *ngIf="feedback" class="container">
-                <ng-container  [ngTemplateOutlet]="feedbackDisplay">
-                </ng-container>
-            </div>
-            <div *ngIf="ticket.status === 'closed'" class="container my-4" style="border:0px;text-align: center;">
-                <ng-container>
-                    <button class="btn btn-primary" (click)="onAddOrEditFeedback()">{{feedback? 'Edit' : 'Add'}} feedback</button>
-                </ng-container>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="currentUser?.role==='EMPLOYEE'">
-            <ng-container *ngIf="ticket.status === 'raised'">
-                <button class="btn btn-primary" [routerLink]="['/tickets', ticket.ticket_id, 'operation', 'resolve']">Resolve this ticket</button>
-            </ng-container>
-            <ng-container *ngIf="ticket.status === 'in_progress'">
-                <button class="btn btn-primary" [routerLink]="['/tickets', ticket.ticket_id, 'operation', 'close']">Close this ticket</button>
-            </ng-container>
-            <div class="container">
-                <ng-container *ngIf="messageFromMgr" [ngTemplateOutlet]="mgrMessageDisplay">
-                </ng-container>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="currentUser?.role==='MANAGER'">
-            <div *ngIf="feedback" class="container my-2">
-                <ng-container  [ngTemplateOutlet]="feedbackDisplay">
-                </ng-container>
-            </div>
-            <div *ngIf="messageFromMgr" class="container my-2">
-                <ng-container [ngTemplateOutlet]="mgrMessageDisplay">
-                </ng-container>
-            </div>
-            <div *ngIf="feedback && ticket.status === 'closed'" class="container my-4" style="border:0px;text-align: center;">
-                <ng-container>
-                    <button class="btn btn-primary w-100">Add Note to Helpdesk</button>
-                </ng-container>
-            </div>
-        </ng-container>
-    </div>
+    <button 
+    *ngIf="currentUser && currentUser.role==='CUSTOMER' && ticket.status ==='closed'"
+    class="btn btn-primary w-100" 
+    (click)="onAddOrEditFeedback()">
+    {{feedback? 'Edit' : 'Add'}}
+        feedback
+    </button>
+    
+    <button
+        *ngIf="currentUser && currentUser.role==='HELPDESK' && ticket.status ==='raised'"
+        class="btn btn-primary w-100"
+        [routerLink]="['/tickets', ticket.ticket_id, 'operation', 'resolve']"
+    > 
+    Resolve this ticket
+    </button>
+ 
+    <button class="btn btn-primary w-100"
+        *ngIf="currentUser && currentUser.role==='HELPDESK' && ticket.status ==='in_progress'"
+        [routerLink]="['/tickets', ticket.ticket_id, 'operation', 'close']"
+    >
+    Close this ticket
+    </button>
+    <button
+        *ngIf="currentUser && currentUser.role==='MANAGER' && feedback && ticket.status==='closed'"
+        class="btn btn-primary w-100"
+    >
+    {{messageFromMgr ? 'Edit': 'Add'}} 
+    Note to Helpdesk
+    </button>
+        
 </div>
-
-<ng-template #feedbackDisplay>
-    <div class="card-body p-2" >
-        <h3 class="card-title" style="text-align:center">Feedback from customer</h3>
-        <hr/>
-        <p-rating [(ngModel)]="feedback.stars" [readonly]="true" [cancel]="false"></p-rating>
-        <p class="card-text">{{feedback.description}}</p>
-        <p class="fw-light">{{feedback.created_on | date}}</p>
-    </div>
-</ng-template>
-
-<<ng-template #mgrMessageDisplay>
-    <div class="card-body p-2" >
-        <h3 class="card-title" style="text-align:center">Note to helpdesk</h3>
-        <hr/>
-        <p class="card-text">{{messageFromMgr.message}}</p>
-        <p class="fw-light">{{messageFromMgr.created_at | date}}</p>
-    </div>
-</ng-template>

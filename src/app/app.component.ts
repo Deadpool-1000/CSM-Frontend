@@ -25,7 +25,6 @@ export class AppComponent implements OnInit , OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("Destroy");
     this.authService.clearExpirationTimer();
     this.loadingServiceSubscription.unsubscribe();
   }

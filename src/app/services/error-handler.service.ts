@@ -20,13 +20,10 @@ export class ErrorHandlerService {
             case 400:
                 return throwError(errorData.message);
             case 401:
-                this.router.navigate(['auth/login']);
                 return throwError(errorData.message);
             case 403:
-                this.router.navigate(['auth/login']);
                 return throwError(errorData.message);
             case 404:
-                this.router.navigate(['not-found']);
                 return throwError(errorData.message);
             case 409:
                 return throwError('Email already in Use.');

@@ -1,13 +1,13 @@
 import { ActivatedRouteSnapshot, ResolveFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { TicketService } from "../services/tickets.services";
 import { inject } from "@angular/core";
-import { TicketDetailModel } from "../models/ticket.model";
+import { TicketDetailModel, TicketExtraDetails } from "../models/ticket.model";
 import { Observable } from "rxjs";
 import {tap} from 'rxjs/operators';
 import { LoadingService } from "../../services/loading.service";
 
 
-export const TicketResolver: ResolveFn<Observable<TicketDetailModel>|Promise<boolean>> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<TicketDetailModel>|Promise<boolean> =>{
+export const TicketResolver: ResolveFn<Observable<TicketExtraDetails>|Promise<boolean>|Observable<{}>>= (route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<TicketExtraDetails>|Promise<boolean>|Observable<{}> =>{
     const ticketService = inject(TicketService);
     const loadingService = inject(LoadingService);
     
@@ -18,7 +18,7 @@ export const TicketResolver: ResolveFn<Observable<TicketDetailModel>|Promise<boo
         return ticketService.getTicketDetail(ticket_id).
         pipe(
             tap(
-                _=>{
+                (_)=>{
                     loadingService.isLoading.next(false)
                 }
             )

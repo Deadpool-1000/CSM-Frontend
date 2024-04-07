@@ -9,35 +9,68 @@
             </div>
             <form #f="ngForm" (ngSubmit)="handleSignup(f)">
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="full-name"  placeholder="Full Name" ngModel required />
+                    <input type="text" class="form-control" name="full-name" placeholder="Full Name" ngModel required
+                        #fullName="ngModel" minlength="6"/>
+                    <div class="invalid-message" *ngIf="fullName.invalid && (fullName.dirty || fullName.touched)">
+                        *Please enter a full name that is atleast 6 characters long.
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <input type="email" class="form-control" name="email"  placeholder="Email" ngModel required email/>
+                    <input type="email" class="form-control" name="email" placeholder="Email" ngModel required email
+                        #email="ngModel" />
+                    <div class="invalid-message" *ngIf="email.invalid && (email.dirty || email.touched)">
+                        *Please enter a valid email
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" name="password"  placeholder="Password" ngModel required pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"/>
+                    <input type="password" class="form-control" name="password" placeholder="Password" ngModel required
+                        pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" #password="ngModel"/>
+                    <div class="invalid-message" *ngIf="password.invalid && (password.dirty || password.touched)">
+                        *Please ensure your password is atleast 8 characters long, and it contains numbers, one capital-letter, one small letter and atleast one special character.
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" name="confirm-password"  placeholder="Confirm Password" ngModel required pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"/>
+                    <input type="password" class="form-control" name="confirm-password" placeholder="Confirm Password"
+                        ngModel required pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" #confirmPassword="ngModel"/>
+                    <div class="invalid-message" *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)">
+                        *Please ensure your password is atleast 8 characters long, and it contains numbers, one capital-letter, one small letter and atleast one special character.
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="address-1"  placeholder="Address Line 1" ngModel required/>
+                    <input type="text" class="form-control" name="address-1" placeholder="Address Line 1" ngModel
+                        required #add1="ngModel"/>
+                    <div class="invalid-message" *ngIf="add1.invalid && (add1.dirty || add1.touched)">
+                        *Please enter a valid address line 1.
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="address-2"  placeholder="Address Line 2" ngModel required/>
+                    <input type="text" class="form-control" name="address-2" placeholder="Address Line 2" ngModel
+                        required #add2="ngModel"/>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
-                        <input type="text" class="form-control" name="city"  placeholder="City" ngModel required/>
+                        <input type="text" class="form-control" name="city" placeholder="City" ngModel required #city="ngModel"/>
+                        <div class="invalid-message" *ngIf="city.invalid && (city.dirty || city.touched)">
+                            *Please enter a valid city.
+                        </div>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" name="pincode"  placeholder="pincode" ngModel required pattern="[0-9]{6}"/>
+                        <input type="text" class="form-control" name="pincode" placeholder="pincode" ngModel required
+                            pattern="[0-9]{6}" #pincode="ngModel"/>
+                        <div class="invalid-message" *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
+                            *Please ensure the pincode is of 6 digits.
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="phone-number" placeholder="Phone number" ngModel pattern="[6-9][0-9]{9}" />
+                    <input type="text" class="form-control" name="phone-number" placeholder="Phone number" ngModel
+                        pattern="^\+[1-9]{2}[0-9]{10}$" #phoneNumber="ngModel" required/>
                     <div id="passwordHelpBlock" class="form-text">
-                        Your phone number must be of pattern: Country code followed by your phone number (eg.+9199020292xx)
+                        Your phone number must be of pattern: Country code followed by your phone number
+                        (eg.+9199020292xx)
+                    </div>
+                    <div class="invalid-message" *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)">
+                        *Please ensure that you enter the mobile number in correct format.
                     </div>
                 </div>
                 <p class="form-text"><a routerLink="/auth/login">Already a member?</a></p>

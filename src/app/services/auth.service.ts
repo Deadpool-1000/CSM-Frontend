@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from "rxjs/operators";
 import { TokenService } from "./token.service";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { StorageService } from "./storage.service";
 import { UserModel } from "../models/user.model";
 import { Router } from "@angular/router";
@@ -22,47 +22,47 @@ const TOKEN_EXPIRATION_TIME = 900;
 export class AuthService {
     isLoggedIn = new BehaviorSubject<boolean>(false);
     currentUser = new BehaviorSubject<UserModel | null>(null);
-    
+
     tokenExpirationTimer: any;
     constructor(private http: HttpClient, private tokenService: TokenService, private storageService: StorageService, private router: Router, private errorHandler: ErrorHandlerService) { }
-    
 
-    login(email: string, password: string, role: string){
-        return this.http.post<{token: string}>(LOGIN_URL, {
+
+    login(email: string, password: string, role: string) {
+        return this.http.post<{ token: string }>(LOGIN_URL, {
             email,
             password,
             role
         })
-        .pipe(
-            catchError(
-                (err)=>this.errorHandler.handleError(err)
-            ),
-            tap(
-                (data)=>{
-                    this.tokenService.token = data.token;
-                    this.getProfile().
-                    subscribe((userProfile) => {
-                            // set user profile and expiry time to session storage
-                            this.storageService.setItemToStorage('user', JSON.stringify(userProfile));
-                            this.storageService.setItemToStorage('expiry', new Date((new Date().getTime())+900*1000).toISOString());
-                            this.storageService.setItemToStorage('token', data.token);
+            .pipe(
+                catchError(
+                    (err) => this.errorHandler.handleError(err)
+                ),
+                tap(
+                    (data) => {
+                        this.tokenService.token = data.token;
+                        this.getProfile().
+                            subscribe((userProfile) => {
+                                // emit the new user to all the subscribed components
+                                this.currentUser.next(userProfile);
+                                this.isLoggedIn.next(true);
 
-                            // set logout timer to log user out automatically
-                            this.tokenExpirationTimer = setTimeout(()=>{
-                                this.logout("Your session has expired. Please log in to continue.");
-                            },TOKEN_EXPIRATION_TIME*1000);
+                                // set user profile and expiry time to session storage
+                                this.storageService.setItemToStorage('user', JSON.stringify(userProfile));
+                                this.storageService.setItemToStorage('expiry', new Date((new Date().getTime()) + 900 * 1000).toISOString());
+                                this.storageService.setItemToStorage('token', data.token);
 
-                            // emit the new user to all the subscribed components
-                            this.currentUser.next(userProfile);
-                            this.isLoggedIn.next(true)
-                        }
-                    )
-                }
+                                // set logout timer to log user out automatically
+                                this.tokenExpirationTimer = setTimeout(() => {
+                                    this.logout("Your session has expired. Please log in to continue.");
+                                }, TOKEN_EXPIRATION_TIME * 1000);
+                            }
+                            )
+                    }
+                )
             )
-        )
     }
 
-    signup(email: string, password: string, full_name: string, phn_num: string, address: string){
+    signup(email: string, password: string, full_name: string, phn_num: string, address: string) {
         return this.http.post(SIGNUP_URL, {
             email,
             password,
@@ -71,32 +71,32 @@ export class AuthService {
             address
         }).pipe(
             catchError(
-                (err)=>this.errorHandler.handleError(err)
+                (err) => this.errorHandler.handleError(err)
             )
         );
     }
 
-    autoLogin(){
+    autoLogin() {
         const token = this.storageService.getItemFromStorage('token');
         const jsonProfile = this.storageService.getItemFromStorage('user');
         const exp = this.storageService.getItemFromStorage('expiry');
 
         // if token is present
-        if(token && jsonProfile && exp){
+        if (token && jsonProfile && exp) {
             this.tokenService.token = token;
-            const profile:UserModel = JSON.parse(jsonProfile);
-            
+            const profile: UserModel = JSON.parse(jsonProfile);
+
             const expiryDate = new Date(exp);
             const timeLeft = expiryDate.getTime() - new Date().getTime();
 
             // expired token
-            if(timeLeft < 0){
+            if (timeLeft < 0) {
                 return this.logout("Your session has expired. Please log in to continue.");
             }
-            this.tokenExpirationTimer = setTimeout(()=>{
+            this.tokenExpirationTimer = setTimeout(() => {
                 this.logout("Your session has expired. Please log in to continue.");
-            },timeLeft)
-            
+            }, timeLeft)
+
             this.currentUser.next(profile);
             this.isLoggedIn.next(true);
         } else {
@@ -104,28 +104,27 @@ export class AuthService {
             this.storageService.clear();
         }
     }
-    
-    getProfile(){
-        return this.http.get<UserModel>(PROFILE_URL)
+
+    getProfile() {
+        return this.http.get<UserModel>(PROFILE_URL);
     }
 
-    logout(message: string){
+    logout(message: string) {
         // send logout request to server to invalidate current token
-        this.http.post(LOGOUT_URL, {})
-        .subscribe((done)=>{
-                this.clearExpirationTimer();
-                this.storageService.clear();
-                this.currentUser.next(null);
-                this.isLoggedIn.next(false);
-                this.router.navigate(['auth', 'login'], {
-                    queryParams: {'message': message}
-                });
-            }
+        this.http.post(LOGOUT_URL, {}).subscribe((done) => {
+            this.clearExpirationTimer();
+            this.storageService.clear();
+            this.currentUser.next(null);
+            this.isLoggedIn.next(false);
+            this.router.navigate(['auth', 'login'], {
+                queryParams: { 'message': message }
+            });
+        }
         )
     }
 
-    clearExpirationTimer(){
-        if(this.tokenExpirationTimer){
+    clearExpirationTimer() {
+        if (this.tokenExpirationTimer) {
             clearTimeout(this.tokenExpirationTimer);
         }
     }

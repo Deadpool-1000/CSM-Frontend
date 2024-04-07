@@ -10,10 +10,11 @@ import {DataViewModule} from 'primeng/dataview'
 import {CardModule} from 'primeng/card'
 import { UserDetailComponent } from "../utility/user-detail/user-detail.component";
 import { MessageComponent } from "../utility/message/message.component";
-import { FeedbackService } from "../feedback/feedback.service";
-import { MessageFromMgrService } from "../message-from-mgr/message-from-mgr.service";
+import { FeedbackService } from "../services/feedback.service";
+import { MessageFromMgrService } from "../services/message-from-mgr.service";
 import { FormsModule } from "@angular/forms";
 import { RatingModule } from "primeng/rating";
+import { OrderByPipe } from "./pipes/order-by.pipe";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { RatingModule } from "primeng/rating";
         NewTicketComponent,
         TicketsListComponent,
         TicketDetailComponent,
+        OrderByPipe
     ],
     imports: [
         DataViewModule,RatingModule,

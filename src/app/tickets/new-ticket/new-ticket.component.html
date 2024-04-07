@@ -3,32 +3,45 @@
         <div class="form-container">
             <form #f="ngForm" (ngSubmit)="handleSubmit(f)">
                 <h2>Raise a new Ticket</h2>
-                <div class="form-text my-2">We are very sorry that you encountered issue with our product. Please fill the following form so that we can address your issue as soon as possible.</div>
+                <div class="form-text my-2">We are very sorry that you encountered issue with our product. Please fill
+                    the following form so that we can address your issue as soon as possible.</div>
                 <div class="mb-3">
                     <label for="" class="form-label">Title</label>
-                    <input type="text" class="form-control" name="title" ngModel required/>
+                    <input type="text" class="form-control" name="title" ngModel required #title="ngModel" />
+                    <div class="invalid-message" *ngIf="title.invalid && (title.dirty || title.touched)">
+                        *Title must be between 2-20 characters long.
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="" class="form-label">Description</label>
-                    <div class="form-text mb-2">Please feel free to include any product identification numbers. It makes it easier to resolve your issue faster.</div>
-                    <textarea type="text" class="form-control" name="description" cols="6" rows="6" ngModel required></textarea>
+                    <div class="form-text mb-2">Please feel free to include any product identification numbers. It makes
+                        it easier to resolve your issue faster.</div>
+                    <textarea type="text" class="form-control" name="description" cols="6" rows="6" ngModel required
+                        #desc="ngModel"></textarea>
+                    <div class="invalid-message" *ngIf="desc.invalid && (desc.touched || desc.dirty)">
+                        *Please enter a description.
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Department</label>
-                    <select class="form-select" aria-label="Default select example" ngModel name="department" required>
-                        <option value="1">Sales</option>
-                        <option value="2">IT</option>
-                        <option value="3">QA</option>
+                    <select class="form-select" ngModel name="department" required #dept="ngModel">
+                        <option class="dropdown-item" value="none" selected disabled>Select an Option</option>
+                        <option class="dropdown-item" value="1">Sales</option>
+                        <option class="dropdown-item" value="2">IT</option>
+                        <option class="dropdown-item" value="3">QA</option>
                     </select>
+                    <div class="invalid-message" *ngIf="dept.invalid && (dept.touched || dept.dirty)">
+                        *Please select an option.
+                    </div>
                 </div>
-                <button class="btn btn-primary" type="submit" style="width:100%" [disabled]="isLoading || !f.valid">
+                <button class="btn btn-primary w-100" type="submit" [disabled]="isLoading || !f.valid">
                     <span *ngIf="!isLoading; else loading">Submit</span>
                     <ng-template #loading>
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">  Loading...</span>
+                        <span class="sr-only"> Loading...</span>
                     </ng-template>
                 </button>
             </form>
         </div>
-        </div>
+    </div>
 </div>

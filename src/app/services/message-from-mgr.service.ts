@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MgrFeedbackModel } from "../models/feedback.model";
 import { catchError } from "rxjs";
-import { ErrorHandlerService } from "../services/error-handler.service";
+import { ErrorHandlerService } from "./error-handler.service";
 
 
 const BASE_URL = 'http://localhost:5000';

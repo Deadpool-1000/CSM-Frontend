@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="form-container">
-            <div class="logo-container mb-1">
+            <div class="logo-container mb-2">
                 <img src="../../../assets/logo.png" alt="" class="form-logo">
             </div>
             <div class="alert alert-info" *ngIf="message">
@@ -9,28 +9,37 @@
             </div>
             <form action="" #f="ngForm" (ngSubmit)="handleLogin(f)">
                 <div class="mb-3">
-                    <input type="email" class="form-control" name="email"  placeholder="Email" ngModel required/>
+                    <input type="email" class="form-control" name="email"  placeholder="Email" ngModel required email #email="ngModel"/>
+                    <div class="invalid-message" *ngIf="email.invalid && (email.dirty || email.touched)">
+                        *Please enter your email.
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" name="password"  placeholder="Password" ngModel required/>
+                    <input type="password" class="form-control" name="password"  placeholder="Password" ngModel required #password="ngModel"/>
+                    <div class="invalid-message" *ngIf="password.invalid && (password.touched || password.dirty)">
+                        *Please enter your password.
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <span>Are you: </span>
+                    <span>Are you a: </span>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="customerRadio" value="customer" name="role" ngModel>
+                        <input class="form-check-input" type="radio" id="customerRadio" value="customer" name="role" ngModel #role="ngModel">
                         <label class="form-check-label" for="customerRadio">
                             Customer
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="employeeRadio" value="employee" name="role" ngModel>
+                        <input class="form-check-input" type="radio" id="employeeRadio" value="employee" name="role" ngModel #role="ngModel">
                         <label class="form-check-label" for="employeeRadio">
                             Employee
                         </label>
                     </div>
+                    <div class="invalid-feedback" *ngIf="role.invalid && (role.touched || role.dirty)">
+                        *Please select your Role.
+                    </div>
                 </div>
                 <p class="form-text"><a routerLink="/auth/signup">New User?</a></p>
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" type="submit" [disabled]="isLoading || !f.valid">
                     <span *ngIf="!isLoading; else loading">Login</span>
                     <ng-template #loading>
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

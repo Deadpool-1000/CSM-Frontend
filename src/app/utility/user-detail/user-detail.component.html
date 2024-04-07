@@ -1,15 +1,16 @@
-
-<div class="card-body p-4">
-    <h1 style="text-align: center;">{{role}} details</h1>
-    <hr/>
-    <div class="row">
-        <div class="col-4">
-            <img src="../../../assets/user.png" height="100px" width="100px" style="border-radius: 100%;" alt="">
-        </div>
-        <div class="col-6">
-            <p><strong>Name:</strong> {{user?.full_name}}</p>
-            <p><strong>Email:</strong> {{user?.email}}</p>
-            <p><strong>Phone Number:</strong> {{user?.phn_num}}</p>
+<div class="card px-4">
+    <div class="card-body">
+        <h1 style="text-align: center;">{{role}} details</h1>
+        <hr/>
+        <div class="row">
+            <div class="col-md-2 border-end">
+                <img src="../../../assets/user.png" height="100" width="100" style="border-radius: 100%;" alt="">
+            </div>
+            <div class="col-md-6">
+                <p><strong>Name:</strong> {{user?.full_name}}</p>
+                <p><strong>Email:</strong> {{user?.email}}</p>
+                <p><strong>Phone Number:</strong> {{user?.phn_num}}</p>
+            </div>
         </div>
     </div>
 </div>

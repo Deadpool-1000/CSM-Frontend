@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageFromMgrService } from './message-from-mgr.service';
+import { MessageFromMgrService } from '../../services/message-from-mgr.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketModel } from '../tickets/models/ticket.model';
-import { TicketItemComponent } from '../utility/ticket-item/ticket-item.component';
+import { TicketModel } from '../../tickets/models/ticket.model';
+import { TicketItemComponent } from '../../utility/ticket-item/ticket-item.component';
 import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
 

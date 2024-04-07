@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { HomeComponent } from './components/home/home.component';
+import { AboutComponent } from './components/about/about.component';
 import { TicketResolver } from './tickets/resolver/ticket-resolver.service';
-import { isLoginGuard } from './guards/isLogin-guard.service';
-import { allowedUsers } from './guards/role-guard.service';
+import { isLoginGuard } from './services/guards/isLogin-guard.service';
+import { allowedUsers } from './services/guards/role-guard.service';
+
 
 const routes: Routes = [
   {
@@ -19,28 +20,28 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then(m=>m.AuthModule)
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
     path: 'tickets',
     canActivate: [isLoginGuard],
     canActivateChild: [isLoginGuard],
-    loadChildren: () => import('./tickets/tickets.module').then(m=>m.TicketsModule)
+    loadChildren: () => import('./tickets/tickets.module').then(m => m.TicketsModule)
   },
   {
     path: 'tickets/:id/feedback',
     canActivate: [allowedUsers('CUSTOMER')],
-    loadComponent: ()=>import('./feedback/feedback.component').then(m=>m.FeedbackComponent)
+    loadComponent: () => import('./components/feedback/feedback.component').then(m => m.FeedbackComponent)
   },
   {
     path: 'tickets/:id/operation',
     canActivate: [allowedUsers('HELPDESK')],
-    loadChildren: () => import('./helpdesk-operations/helpdesk-operations.module').then(m=>m.HelpdeskOperationsModule)
+    loadChildren: () => import('./helpdesk-operations/helpdesk-operations.module').then(m => m.HelpdeskOperationsModule)
   },
   {
     path: 'tickets/:id/message-from-mgr',
     canActivate: [allowedUsers('MANAGER')],
-    loadComponent: ()=>import('./message-from-mgr/message-from-mgr.component').then(m=>m.MessageFromMgrComponent),
+    loadComponent: () => import('./components/message-from-mgr/message-from-mgr.component').then(m => m.MessageFromMgrComponent),
     resolve: {
       ticket: TicketResolver
     }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RatingModule } from 'primeng/rating';
-import { FeedbackService } from './feedback.service';
+import { FeedbackService } from '../../services/feedback.service';
 import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
 
