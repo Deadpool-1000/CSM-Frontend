@@ -103,6 +103,7 @@ export class AuthService {
             // clear session storage to prevent misuse
             this.storageService.clear();
         }
+        return 0;
     }
 
     getProfile() {
@@ -111,15 +112,13 @@ export class AuthService {
 
     logout(message: string) {
         // send logout request to server to invalidate current token
-        this.http.post(LOGOUT_URL, {}).subscribe((done) => {
-            this.clearExpirationTimer();
-            this.storageService.clear();
-            this.currentUser.next(null);
-            this.isLoggedIn.next(false);
-            this.router.navigate(['auth', 'login'], {
-                queryParams: { 'message': message }
-            });
-        }
+        return this.http.post(LOGOUT_URL, {}).pipe(
+            tap((done) => {
+                this.clearExpirationTimer();
+                this.storageService.clear();
+                this.currentUser.next(null);
+                this.isLoggedIn.next(false);
+            })
         )
     }
 
