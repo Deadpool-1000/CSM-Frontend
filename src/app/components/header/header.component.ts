@@ -31,20 +31,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   onLogout(){
     this.loadingService.isLoading.next(true);
-    this.logoutSubscription = this.authService.logout("Logged out Successfully.").subscribe({
+    this.logoutSubscription = this.authService.logout(Text.LOGOUT).subscribe({
       error: (error)=>{
         this.messageService.add({
           severity: 'error',
           summary: Text.ERROR,
-          detail: error
-        })
+          detail: error.message
+        });
+        this.router.navigate(['about']);
       },
       complete: ()=>{
-        this.messageService.add({
-          severity: 'success',
-          summary: Text.SUCCESS,
-          detail: Text.LOGOUT
-        })
         this.router.navigate(['auth', 'login']);
         this.loadingService.isLoading.next(false);
       }

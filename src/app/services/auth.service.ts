@@ -8,6 +8,7 @@ import { UserModel } from "../models/user.model";
 import { Router } from "@angular/router";
 import { ErrorHandlerService } from "./error-handler.service";
 import { Text } from "../statics/text";
+import { MessageService } from "primeng/api";
 
 
 @Injectable({
@@ -18,7 +19,7 @@ export class AuthService {
     currentUser = new BehaviorSubject<UserModel | null>(null);
 
     tokenExpirationTimer: any;
-    constructor(private http: HttpClient, private tokenService: TokenService, private storageService: StorageService, private router: Router, private errorHandler: ErrorHandlerService) { }
+    constructor(private http: HttpClient, private tokenService: TokenService, private storageService: StorageService, private router: Router, private errorHandler: ErrorHandlerService, private messageService: MessageService) { }
 
 
     login(email: string, password: string, role: string) {
@@ -115,6 +116,11 @@ export class AuthService {
                 this.storageService.clear();
                 this.currentUser.next(null);
                 this.isLoggedIn.next(false);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: Text.SUCCESS,
+                    detail: message
+                })
             })
         )
     }
