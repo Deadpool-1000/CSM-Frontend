@@ -8,9 +8,9 @@
         </ul>
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Filter by status <i class="bi bi-filter"></i></button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'raised'}">Raised</a></li>
-            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'in_progress'}">In Progress</a></li>
-            <li><a class="dropdown-item" routerLink="/tickets" [queryParams]="{status: 'closed'}">Closed</a></li>
+            <li><a class="dropdown-item" (click)="filterBy='raised'">Raised</a></li>
+            <li><a class="dropdown-item" (click)="filterBy='in_progress'">In Progress</a></li>
+            <li><a class="dropdown-item" (click)="filterBy='closed'">Closed</a></li>
         </ul>
     </div>
     <ng-container *ngIf="filteredTickets.length<=0 ; else displayTickets">
@@ -19,7 +19,16 @@
         </div>
     </ng-container>
     <ng-template #displayTickets>
-        <app-ticket-item *ngFor="let ticket of filteredTickets | orderBy: sortBy" [ticket]="ticket"></app-ticket-item>
+        <app-ticket-item *ngFor="let ticket of filteredTickets | orderBy: sortBy | filterBy: filterBy" [ticket]="ticket"></app-ticket-item>
     </ng-template>
     
 </div>
+<ng-template #customerHeading>
+    <h1>Tickets Raised by you:</h1>
+</ng-template>
+<ng-template #helpdeskHeading>
+    <h1>Your tickets:</h1>
+</ng-template>
+<ng-template #managerHeading>
+    <h1>All Tickets</h1>
+</ng-template>

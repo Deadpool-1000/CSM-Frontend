@@ -10,7 +10,7 @@
             <form #f="ngForm" (ngSubmit)="handleSignup(f)">
                 <div class="mb-3">
                     <input type="text" class="form-control" name="full-name" placeholder="Full Name" ngModel required
-                        #fullName="ngModel" minlength="6"/>
+                        #fullName="ngModel" minlength="6" maxlength="20"/>
                     <div class="invalid-message" *ngIf="fullName.invalid && (fullName.dirty || fullName.touched)">
                         *Please enter a full name that is atleast 6 characters long.
                     </div>

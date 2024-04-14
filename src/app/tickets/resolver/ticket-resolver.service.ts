@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, ResolveFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { TicketService } from "../services/tickets.services";
+import { TicketService } from "../../services/tickets.services";
 import { inject } from "@angular/core";
-import { TicketDetailModel, TicketExtraDetails } from "../models/ticket.model";
+import { TicketDetailModel, TicketExtraDetails } from "../../models/ticket.model";
 import { Observable } from "rxjs";
 import {tap} from 'rxjs/operators';
 import { LoadingService } from "../../services/loading.service";

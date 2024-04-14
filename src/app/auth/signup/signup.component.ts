@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Text } from '../../statics/text';
+
 
 @Component({
   selector: 'app-signup',
@@ -37,23 +37,24 @@ export class SignupComponent implements OnDestroy {
     this.signupSubscription = this.authService.signup(
       email, password, fullName, phoneNumber, address
     ).subscribe({
-        next: (data) => {
-          console.log(data)
-          this.isLoading = false;
-          this.router.navigate(['/auth/login'], {
-            queryParams: new HttpParams().set('message', Text.LOGIN_TO_CONTINUE)
-          })
-        },
-        error: error => {
-          console.log(error);
-          this.isLoading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: Text.ERROR,
-            detail: error
-          })
-        }
-      })
+      error: error => {
+        this.isLoading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: Text.ERROR,
+          detail: error
+        })
+      },
+      complete: () => {
+        this.isLoading = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: Text.SUCCESS,
+          detail: Text.LOGIN_TO_CONTINUE
+        })
+        this.router.navigate(['/auth/login']);
+      }
+    })
   }
 
   prepareAddress(address1: string, address2: string, city: string, pincode: string) {
@@ -63,7 +64,7 @@ export class SignupComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.signupSubscription)
+    if (this.signupSubscription)
       this.signupSubscription.unsubscribe()
   }
 }

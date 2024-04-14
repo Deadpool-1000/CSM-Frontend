@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { TicketService } from '../services/tickets.services';
+import { TicketService } from '../../services/tickets.services';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,15 +21,6 @@ export class NewTicketComponent implements OnDestroy {
     this.isLoading = true;
     const {title, description, department} = (issueForm.value);
     this.newTicketSubscription = this.ticketService.raiseNewTicket(title, description, department).subscribe({
-      next: (_) => {
-        this.isLoading = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: Text.SUCCESS,
-          detail: Text.NEW_TICKET
-        })
-        this.router.navigate(['/tickets']);
-      },
       error: (error) => {
         this.isLoading = false;
         this.messageService.add({
@@ -37,6 +28,15 @@ export class NewTicketComponent implements OnDestroy {
           summary: Text.ERROR,
           detail: error
         });
+      },
+      complete: ()=>{
+        this.isLoading = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: Text.SUCCESS,
+          detail: Text.NEW_TICKET
+        })
+        this.router.navigate(['/tickets']);
       }
     })
   }

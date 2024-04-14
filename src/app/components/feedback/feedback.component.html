@@ -1,28 +1,26 @@
 <div class="container">
     <div class="row">
         <div class="form-container">
-            <h4 style="text-align: center;">Feedback for ticket #{{ticket_id}}</h4>
+            <h4 style="text-align: center;">{{stars && description ? 'Edit': 'Add'}} Feedback for ticket #{{ticket_id}}
+            </h4>
             <form #f="ngForm" (ngSubmit)="handleSubmit(f)">
                 <div class="my-3">
-                    <label class="form-label">Stars</label>
+                    <label class="form-label">Stars: </label>
                     <p-rating [(ngModel)]="stars" name="stars" [cancel]="false"></p-rating>
                 </div>
                 <div class="mb-3">
-                    <label for="" class="form-label">Describe your experience here</label>
-                    <textarea class="form-control" rows="6" name="description"  [(ngModel)]="description" required>
+                    <label for="" class="form-label">Describe your experience here:</label>
+                    <textarea class="form-control" rows="6" name="description" [(ngModel)]="description" required>
                     </textarea>
                 </div>
-                <button 
-                    [disabled]="isLoading || !f.valid"
-                    class="btn btn-primary"
-                >
-                <span *ngIf="!isLoading; else loading">Submit</span>
+                <button [disabled]="isLoading || !f.valid" class="btn btn-primary">
+                    <span *ngIf="!isLoading; else loading">Submit</span>
                     <ng-template #loading>
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">  Loading...</span>
+                        <span class="sr-only"> Loading...</span>
                     </ng-template>
                 </button>
             </form>
         </div>
-        </div>
+    </div>
 </div>

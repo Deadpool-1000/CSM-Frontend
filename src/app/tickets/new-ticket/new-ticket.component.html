@@ -7,7 +7,7 @@
                     the following form so that we can address your issue as soon as possible.</div>
                 <div class="mb-3">
                     <label for="" class="form-label">Title</label>
-                    <input type="text" class="form-control" name="title" ngModel required #title="ngModel" />
+                    <input type="text" class="form-control" name="title" ngModel required #title="ngModel" minlength="2" maxlength="20" />
                     <div class="invalid-message" *ngIf="title.invalid && (title.dirty || title.touched)">
                         *Title must be between 2-20 characters long.
                     </div>

@@ -1,22 +1,52 @@
 <div class="container">
-    
-        <div class="form-container">
-            <h3>Add note to Helpdesk for ticket</h3>
+
+    <div class="form-container">
+        <h3>Add note to Helpdesk for ticket #{{ticket.ticket_id}}</h3>
+        <div class="accordion mb-3" id="TicketAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#TicketDetails">Ticket #{{ticket.ticket_id}}</button>
+                </h2>
+                <div class="accordion-collapse collapse mb-3 p-0" id="TicketDetails" data-bs-parent="#TicketAccordion">
+                    <app-ticket-item [ticket]="ticket"></app-ticket-item>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#feedback">
+                        Customer Feedback</button>
+                </h2>
+                <div class="accordion-collapse collapse mb-3 p-0" id="feedback" data-bs-parent="#TicketAccordion">
+                    <div class="accordion-body">
+                        <div class="card p-3">
+                            <div class="card-body">
+                                <h3 class="card-title" style="text-align:center">Feedback from customer</h3>
+                                <h6 class="card-subtitle mb-2 text-muted">{{feedback.created_on| date: 'medium'}}
+                                </h6>
+                                <hr />
+                                <p-rating [(ngModel)]="feedback.stars" [readonly]="true" [cancel]="false"></p-rating>
+                                <p style="font-size: medium;">{{feedback.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
             <form #messageForm="ngForm" (ngSubmit)="handleSubmit(messageForm)">
-                <app-ticket-item [ticket]="ticket"></app-ticket-item>
-                <hr/>
                 <div class="mb-3">
-                    <label class="form-label fw-bolder">Message to Helpdesk</label>
-                    <textarea name="" id="" rows="6" class="form-control" ngModel required name="message_from_manager"></textarea>
+                    <label class="form-label fw-bolder">{{messageFromMgr? 'Edit': 'Add'}} Message to Helpdesk</label>
+                    <textarea name="" id="" rows="6" class="form-control" ngModel required name="message_from_manager"
+                        [(ngModel)]="messageFromMgr.message"></textarea>
                 </div>
                 <button class="btn btn-primary" [disabled]="isLoading || !messageForm.valid">
                     <span *ngIf="!isLoading; else loading">Submit</span>
                     <ng-template #loading>
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">  Loading...</span>
+                        <span class="sr-only"> Loading...</span>
                     </ng-template>
                 </button>
             </form>
         </div>
-</div>
-
+    </div>

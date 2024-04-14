@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Subscription, take, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { Text } from '../../statics/text';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authSubscription: Subscription;
   logoutSubscription: Subscription;
 
-  constructor(private authService: AuthService, private router: Router, private messageService: MessageService){}
+  constructor(private authService: AuthService, private router: Router, private messageService: MessageService, private loadingService: LoadingService){}
 
   ngOnInit(): void {
     this.userSubscription = this.authService.isLoggedIn.subscribe(isLoggedIn=>{
@@ -29,16 +30,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
     })
   }
   onLogout(){
-    this.logoutSubscription = this.authService.logout("Logged out Successfully.").subscribe(
-      (done)=>{
+    this.loadingService.isLoading.next(true);
+    this.logoutSubscription = this.authService.logout("Logged out Successfully.").subscribe({
+      error: (error)=>{
+        this.messageService.add({
+          severity: 'error',
+          summary: Text.ERROR,
+          detail: error
+        })
+      },
+      complete: ()=>{
         this.messageService.add({
           severity: 'success',
           summary: Text.SUCCESS,
           detail: Text.LOGOUT
         })
         this.router.navigate(['auth', 'login']);
+        this.loadingService.isLoading.next(false);
       }
-    );
+    });
   }
 
   ngOnDestroy(): void {

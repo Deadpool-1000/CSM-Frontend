@@ -1,0 +1,145 @@
+<div class="container rounded bg-white mt-5">
+    <div class="row">
+        <div class="col-md-4 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5"
+                    [src]="currentUser?.role==='CUSTOMER'?'../../assets/user.png':'../../assets/profile-emp.png'"
+                    width="90">
+                <span class="font-weight-bold">{{currentUser?.full_name}}</span>
+                <span class="text-black-50">{{currentUser?.email}}</span>
+                <span>{{currentUser?.role | titlecase}}</span>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="p-3 py-5">
+                <form #f="ngForm" (ngSubmit)="onSaveProfile(f)">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex flex-row align-items-center back">
+                            <button *ngIf="currentUser?.role==='CUSTOMER'" class="btn btn-primary" type="button" style="cursor: pointer;" (click)="edit=!edit">{{edit?'View':
+                                'Edit'}} Profile</button>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <label class="form-label"><strong>Full Name:</strong></label>
+                            <input type="text" [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="full_name" 
+                                #fullNameInp="ngModel" 
+                                minlength="6" maxlength="20" 
+                                required
+                                ngModel
+                                name="fullName"
+                            />
+                            <div class="invalid-message"
+                                *ngIf="fullNameInp.invalid && (fullNameInp.dirty || fullNameInp.touched)">
+                                *Please enter a full name that is atleast 6 characters long.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>Email:</strong></label>
+                            <input type="email" 
+                                [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="email" 
+                                #emailInp="ngModel" 
+                                email 
+                                required
+                                name="email"
+                                ngModel
+                            />
+                            <div class="invalid-message"
+                                *ngIf="emailInp.invalid && (emailInp.dirty || emailInp.touched)">
+                                *Please enter a valid email
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>Phone Number:</strong></label>
+                            <input type="text" 
+                                [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="phn_num" 
+                                pattern="^\+[1-9]{2}[0-9]{10}$" 
+                                required 
+                                #phnNumInp="ngModel" 
+                                ngModel
+                                name="phnNum"
+                            />
+                            <div *ngIf="edit" id="phoneHelpBlock" class="form-text">
+                                Your phone number must be of pattern: Country code followed by your phone number
+                                (eg.+9199020292xx)
+                            </div>
+                            <div class="invalid-message"
+                                *ngIf="phnNumInp.invalid && (phnNumInp.dirty || phnNumInp.touched)">
+                                *Please ensure that you enter the mobile number in correct format.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>Address 1:</strong></label>
+                            <input type="text" 
+                                [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="address1" 
+                                required #add1="ngModel"
+                                ngModel
+                                name="add1"
+                            />
+                            <div class="invalid-message" *ngIf="add1.invalid && (add1.dirty || add1.touched)">
+                                *Please enter a valid address line 1.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>Address 2:</strong></label>
+                            <input type="text" 
+                                [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="address2"
+                                ngModel
+                                name="add2"
+                            />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>City:</strong></label>
+                            <input type="text" 
+                                [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="city" 
+                                #cityInp="ngModel" 
+                                required 
+                                ngModel
+                                name="city"
+                            />
+                            <div class="invalid-message" *ngIf="cityInp.invalid && (cityInp.dirty || cityInp.touched)">
+                                *Please enter a valid city.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>Pincode:</strong></label>
+                            <input type="text" 
+                                [ngClass]="{'form-control-plaintext': !edit, 'form-control': edit}"
+                                [(ngModel)]="pincode" pattern="[0-9]{6}" 
+                                required 
+                                #pincodeInp="ngModel" 
+                                name="pincode"
+                                ngModel
+                            />
+                            <div class="invalid-message"
+                                *ngIf="pincodeInp.invalid && (pincodeInp.dirty || pincodeInp.touched)">
+                                *Please ensure the pincode is of 6 digits.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 text-right" *ngIf="edit">
+                        <button type="submit" class="btn btn-primary" [disabled]="isLoading || !f.valid">
+                            <span *ngIf="!isLoading; else loading">Save Profile</span>
+                            <ng-template #loading>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only"> Loading...</span>
+                            </ng-template>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

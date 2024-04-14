@@ -7,13 +7,7 @@ import { StorageService } from "./storage.service";
 import { UserModel } from "../models/user.model";
 import { Router } from "@angular/router";
 import { ErrorHandlerService } from "./error-handler.service";
-
-const BASE_URL = "http://localhost:5000";
-const LOGIN_URL = `${BASE_URL}/login`;
-const SIGNUP_URL = `${BASE_URL}/signup`;
-const PROFILE_URL = `${BASE_URL}/profile`;
-const LOGOUT_URL = `${BASE_URL}/logout`;
-const TOKEN_EXPIRATION_TIME = 900;
+import { Text } from "../statics/text";
 
 
 @Injectable({
@@ -28,7 +22,7 @@ export class AuthService {
 
 
     login(email: string, password: string, role: string) {
-        return this.http.post<{ token: string }>(LOGIN_URL, {
+        return this.http.post<{ token: string, expiresIn: number }>(Text.LOGIN_URL, {
             email,
             password,
             role
@@ -40,22 +34,25 @@ export class AuthService {
                 tap(
                     (data) => {
                         this.tokenService.token = data.token;
+                        const expiresIn = data.expiresIn;
+                        const expiryDate = new Date((new Date().getTime()) + expiresIn * 1000).toISOString();
                         this.getProfile().
-                            subscribe((userProfile) => {
-                                // emit the new user to all the subscribed components
-                                this.currentUser.next(userProfile);
-                                this.isLoggedIn.next(true);
+                            subscribe(
+                                (userProfile) => {
+                                    // emit the new user to all the subscribed components
+                                    this.currentUser.next(userProfile);
+                                    this.isLoggedIn.next(true);
 
-                                // set user profile and expiry time to session storage
-                                this.storageService.setItemToStorage('user', JSON.stringify(userProfile));
-                                this.storageService.setItemToStorage('expiry', new Date((new Date().getTime()) + 900 * 1000).toISOString());
-                                this.storageService.setItemToStorage('token', data.token);
+                                    // set user profile and expiry time to session storage
+                                    this.storageService.setItemToStorage('user', JSON.stringify(userProfile));
+                                    this.storageService.setItemToStorage('expiry', expiryDate);
+                                    this.storageService.setItemToStorage('token', data.token);
 
-                                // set logout timer to log user out automatically
-                                this.tokenExpirationTimer = setTimeout(() => {
-                                    this.logout("Your session has expired. Please log in to continue.");
-                                }, TOKEN_EXPIRATION_TIME * 1000);
-                            }
+                                    // set logout timer to log user out automatically
+                                    this.tokenExpirationTimer = setTimeout(() => {
+                                        this.logout("Your session has expired. Please log in to continue.");
+                                    }, expiresIn * 1000);
+                                }
                             )
                     }
                 )
@@ -63,7 +60,7 @@ export class AuthService {
     }
 
     signup(email: string, password: string, full_name: string, phn_num: string, address: string) {
-        return this.http.post(SIGNUP_URL, {
+        return this.http.post(Text.SIGNUP_URL, {
             email,
             password,
             full_name,
@@ -107,12 +104,12 @@ export class AuthService {
     }
 
     getProfile() {
-        return this.http.get<UserModel>(PROFILE_URL);
+        return this.http.get<UserModel>(Text.PROFILE_URL);
     }
 
     logout(message: string) {
         // send logout request to server to invalidate current token
-        return this.http.post(LOGOUT_URL, {}).pipe(
+        return this.http.post(Text.LOGOUT_URL, {}).pipe(
             tap((done) => {
                 this.clearExpirationTimer();
                 this.storageService.clear();
@@ -126,6 +123,34 @@ export class AuthService {
         if (this.tokenExpirationTimer) {
             clearTimeout(this.tokenExpirationTimer);
         }
+    }
+
+    putProfile(full_name: string, phn_num: string, address: string, email: string, role?: string, c_id?: string){
+        return this.http.put(Text.PROFILE_URL,{
+            full_name, 
+            phn_num,
+            address,
+            email, 
+            role,
+            c_id
+        }).pipe(
+            tap(
+                (_)=>{
+                    this.storageService.removeItem('user');
+                    this.storageService.setItemToStorage('user', JSON.stringify({
+                        full_name, 
+                        phn_num,
+                        address,
+                        email, 
+                        role,
+                        c_id
+                    }))
+                }
+            ),
+            catchError(
+                err=>this.errorHandler.handleError(err)
+            )
+        )
     }
 
 

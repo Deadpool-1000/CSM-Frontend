@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TicketModel } from '../models/ticket.model';
+import { FilterByValues, SortByValues, TicketModel } from '../../models/ticket.model';
+import { AuthService } from '../../services/auth.service';
+import { UserModel } from '../../models/user.model';
 
 
 @Component({
@@ -12,8 +14,12 @@ export class TicketsListComponent implements OnInit {
   tickets: TicketModel[] = [];
   filteredTickets: TicketModel[] = []
   filterByStatus: string;
-  sortBy: 'asc' | 'dsc' = 'asc'
-  constructor(private activatedRoute: ActivatedRoute){}
+  currentUser: UserModel | null;
+  sortBy: SortByValues;
+  filterBy: FilterByValues;
+
+  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService){}
+  
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
       data=>{
@@ -21,13 +27,10 @@ export class TicketsListComponent implements OnInit {
         this.filteredTickets = this.tickets;
       }
     );
-    this.activatedRoute.queryParamMap.subscribe(
-      queryParams=>{
-        const filterByStatus = queryParams.get('status');
-        console.log("filter by ---> ",filterByStatus);
-        if(filterByStatus && ['closed', 'raised', 'in_progress'].indexOf(filterByStatus) !== -1){
-          this.filteredTickets = this.tickets.filter(ticket=>ticket.status === filterByStatus);
-        }
+
+    this.authService.currentUser.subscribe(
+      currentUser=>{
+        this.currentUser = currentUser;
       }
     )
   }

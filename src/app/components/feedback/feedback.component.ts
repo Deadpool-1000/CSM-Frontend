@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RatingModule } from 'primeng/rating';
 import { FeedbackService } from '../../services/feedback.service';
 import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
+import { Text } from '../../statics/text';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-feedback',
@@ -12,60 +15,60 @@ import { MessageService } from 'primeng/api';
   styleUrl: './feedback.component.css',
   standalone: true,
   imports: [FormsModule, RatingModule, NgIf],
-  providers:[FeedbackService]
+  providers: [FeedbackService]
 })
-export class FeedbackComponent implements OnInit {
+export class FeedbackComponent implements OnInit, OnDestroy {
   stars: number = 1;
-  ticket_id!: string | null;
+  ticket_id: string;
   isLoading = false;
-  description!: string | null
+  description: string;
+  feedbackSubscription: Subscription;
 
-  constructor(private activatedRoute: ActivatedRoute, 
-    private feedbackService: FeedbackService, 
+  constructor(private activatedRoute: ActivatedRoute,
+    private feedbackService: FeedbackService,
     private router: Router,
     private messageService: MessageService
-  ){}
-
-  ngOnInit(): void {
-    const ticket_id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.activatedRoute.data.subscribe(
-      data=>{
-        const feedback = data['feedback'];
-        if(feedback){
-          const {stars, description} = feedback;
-          this.stars = stars;
-          this.description = description;
-      }
-    });
-
-    this.ticket_id = ticket_id;
+  ) {
+    const stateData = this.router.getCurrentNavigation()?.extras.state;
+    if (stateData) {
+      const { stars, description } = stateData['feedback'];
+      this.stars = stars;
+      this.description = description;
+    }
   }
 
-  handleSubmit(feedbackForm: NgForm){
-    const {description, stars} = feedbackForm.value;
+  ngOnInit(): void {
+    this.ticket_id = this.activatedRoute.snapshot.params['id'];
+  }
+
+  handleSubmit(feedbackForm: NgForm) {
+    const { description, stars } = feedbackForm.value;
     this.isLoading = true;
 
-    this.feedbackService.registerFeedback(this.ticket_id, stars, description).subscribe({
-      next: data=>{
-        this.isLoading = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Feedback registered Succesfully.'
-        });
-        this.router.navigate(['tickets', this.ticket_id])
-      },
-      error: error=>{
+    this.feedbackSubscription = this.feedbackService.registerFeedback(this.ticket_id, stars, description).subscribe({
+      error: error => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: error
         });
         this.isLoading = false;
-        this.router.navigate(['tickets']);
+      },
+      complete: ()=>{
+        this.isLoading = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: Text.SUCCESS,
+          detail: `${Text.FEEDBACK_SUCCESS}${this.ticket_id}`
+        });
+        this.router.navigate(['tickets', this.ticket_id])
       }
     })
   }
 
 
+  ngOnDestroy(): void {
+    if(this.feedbackSubscription)
+      this.feedbackSubscription.unsubscribe();
+  }
 }

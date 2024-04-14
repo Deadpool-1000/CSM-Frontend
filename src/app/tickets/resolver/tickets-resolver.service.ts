@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
-import { TicketService } from "../services/tickets.services";
+import { TicketService } from "../../services/tickets.services";
 import { inject } from "@angular/core";
 import { tap } from "rxjs/operators";
 import { LoadingService } from "../../services/loading.service";

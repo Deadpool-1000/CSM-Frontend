@@ -3,19 +3,19 @@ import { Injectable } from "@angular/core";
 import { MgrFeedbackModel } from "../models/feedback.model";
 import { catchError } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
+import { Text } from "../statics/text";
 
 
-const BASE_URL = 'http://localhost:5000';
-const TICKETS_URL = `${BASE_URL}/tickets`
 
-
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MessageFromMgrService{
 
     constructor(private http: HttpClient, private errorHandlerService: ErrorHandlerService){}
 
     addMessageFromMgr(ticket_id: string, message_from_manager: string){
-        return this.http.put(`${TICKETS_URL}/${ticket_id}/message`, {
+        return this.http.put(Text.MESSAGE_URL.replace('{ticket_id}', ticket_id), {
             message_from_manager
         }).pipe(
             catchError(
@@ -25,7 +25,7 @@ export class MessageFromMgrService{
     }
 
     getMessageFromMgr(ticket_id: string){
-        return this.http.get<MgrFeedbackModel>(`${BASE_URL}/tickets/${ticket_id}/message`).pipe(
+        return this.http.get<MgrFeedbackModel>(Text.MESSAGE_URL.replace('{ticket_id}',ticket_id)).pipe(
             catchError(
                 err=>this.errorHandlerService.handleError(err)
             )

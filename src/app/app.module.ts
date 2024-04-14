@@ -19,7 +19,7 @@ import { MessageService } from 'primeng/api';
   declarations: [
     AppComponent,
     HeaderComponent,
-    PageNotFoundComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserAnimationsModule,

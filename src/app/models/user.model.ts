@@ -4,6 +4,8 @@ export interface UserModel  {
     role: string;
     email: string;
     address: string;
+    c_id?: string;
+    e_id?: string;
 }
 
 export interface CustomerModel extends UserModel {

@@ -1,15 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { TicketDetailModel } from "../models/ticket.model";
-import { ErrorHandlerService } from "../../services/error-handler.service";
+import { ErrorHandlerService } from "./error-handler.service";
 import { catchError, forkJoin, Observable, of } from "rxjs";
-import { FeedbackService } from "../../services/feedback.service";
-import { MessageFromMgrService } from "../../services/message-from-mgr.service";
-import { map, mergeMap, tap } from "rxjs/operators"
-import { AuthService } from "../../services/auth.service";
+import { FeedbackService } from "./feedback.service";
+import { MessageFromMgrService } from "./message-from-mgr.service";
+import { map, mergeMap } from "rxjs/operators"
+import { AuthService } from "./auth.service";
+import { Text } from "../statics/text";
 
-const BASE_URL = 'http://localhost:5000';
-const TICKETS_URL = `${BASE_URL}/tickets`;
 
 @Injectable({
     providedIn: "root"
@@ -18,7 +17,7 @@ export class TicketService {
     constructor(private http: HttpClient, private errorHandlerService: ErrorHandlerService, private feedbackService: FeedbackService, private messageFromMgr: MessageFromMgrService, private authService: AuthService) { }
 
     getAllTickets() {
-        return this.http.get(TICKETS_URL).pipe(
+        return this.http.get(Text.TICKETS_URL).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
@@ -29,9 +28,8 @@ export class TicketService {
                 (currentUser) => {
                     if (currentUser) {
                         const basicDetails: { [key: string]: Observable<any> } = {
-                            ticket: this.http.get<TicketDetailModel>(`${BASE_URL}/tickets/${ticket_id}`),
+                            ticket: this.http.get<TicketDetailModel>(Text.TICKET_URL.replace('{ticket_id}', ticket_id)),
                         }
-                        console.log(currentUser)
                         if (currentUser.role === 'CUSTOMER') {
                             basicDetails['feedback'] = this.feedbackService.getFeedback(ticket_id).pipe(catchError(error => of(null)))
                         }
@@ -60,7 +58,7 @@ export class TicketService {
     }
 
     raiseNewTicket(title: string, description: string, department: string) {
-        return this.http.post(TICKETS_URL, {
+        return this.http.post(Text.TICKETS_URL, {
             title,
             description,
             d_id: department

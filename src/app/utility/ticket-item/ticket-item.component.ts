@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { TicketModel } from '../../tickets/models/ticket.model';
+import { TicketModel } from '../../models/ticket.model';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { DatePipe, NgClass } from '@angular/common';
-import { timer } from 'rxjs';
+
 
 @Component({
   selector: 'app-ticket-item',

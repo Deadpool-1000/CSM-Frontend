@@ -4,20 +4,17 @@
             <form #messageForm="ngForm" (ngSubmit)="handleSubmit(messageForm)">
                 <h2 style="text-align: center;">Form for {{operation.slice(0, -1)}}ing Ticket</h2>
                 <app-ticket-item [ticket]="ticket"></app-ticket-item>
-                <hr/>
+                <hr />
                 <div class="mb-3">
                     <label class="form-label fw-bolder">Message to customer</label>
-                    <textarea name="" id="" rows="6" class="form-control" ngModel required name="message_from_helpdesk"></textarea>
+                    <textarea name="" id="" rows="6" class="form-control" ngModel required
+                        name="message_from_helpdesk"></textarea>
                 </div>
-                <button 
-                    class="btn btn-primary"  
-                    type="submit"
-                    [disabled]="!messageForm.valid || isLoading"
-                >
-                <span *ngIf="!isLoading; else loading">{{operation}} this ticket</span>
+                <button class="btn btn-primary" type="submit" [disabled]="!messageForm.valid || isLoading">
+                    <span *ngIf="!isLoading; else loading">{{operation}} this ticket</span>
                     <ng-template #loading>
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">  Loading...</span>
+                        <span class="sr-only"> Loading...</span>
                     </ng-template>
                 </button>
             </form>

@@ -36,19 +36,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       password,
       role
     ).subscribe({
-      next: (_) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: Text.SUCCESS,
-          detail: Text.LOGIN_SUCCESS
-        });
-        timer(2*1000).subscribe(
-          (_)=>{
-            this.isLoading = false;
-            this.router.navigate(['/tickets']);
-          }
-        )
-      },
       error: (error) => {
         this.messageService.add({
           severity: 'error',
@@ -56,12 +43,25 @@ export class LoginComponent implements OnInit, OnDestroy {
           detail: error
         });
         this.isLoading = false;
+      },
+      complete: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: Text.SUCCESS,
+          detail: Text.LOGIN_SUCCESS
+        });
+        timer(2 * 1000).subscribe(
+          (_) => {
+            this.isLoading = false;
+            this.router.navigate(['/tickets']);
+          }
+        )
       }
     });
   }
 
   ngOnDestroy() {
-    if(this.loginSubscription)
+    if (this.loginSubscription)
       this.loginSubscription.unsubscribe();
   }
 }
