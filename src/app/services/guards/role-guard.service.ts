@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { take, map } from "rxjs/operators";
-import { AuthService } from "../auth.service";
+import { AuthService } from "../auth/auth.service";
 
 export function allowedUsers (...roles: string[]): CanActivateFn {
     return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {

@@ -13,11 +13,11 @@ import { Subscription } from 'rxjs';
   styleUrl: './helpdesk-operations.component.css',
 })
 export class HelpdeskOperationsComponent implements OnInit, OnDestroy {
-  ticket !: TicketModel;
-  operation !: string;
+  ticket: TicketModel;
+  operation: string;
   isLoading = false;
   operationSubscription: Subscription;
-
+  errorMessage: string;
 
   constructor(private messageService: MessageService, private router: Router, private activatedRoute: ActivatedRoute, private helpdeskOperationService: HelpdeskOperationService) { }
 
@@ -39,6 +39,11 @@ export class HelpdeskOperationsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const { message_from_helpdesk } = messageForm.value;
 
+    if(messageForm.invalid){
+      this.errorMessage = "Please fill all the required fields correctly"
+      return;
+    }
+    
     if (this.operation === 'close') {
       this.operationSubscription = this.helpdeskOperationService.closeTicket(this.ticket.ticket_id, message_from_helpdesk).subscribe(
         (_) => {

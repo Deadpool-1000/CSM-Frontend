@@ -4,3 +4,8 @@
     background-color: white;
     width: 70%;
 }
+
+
+:host ::ng-deep a {
+    text-decoration: none;
+}

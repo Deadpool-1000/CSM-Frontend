@@ -1,10 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { FeedbackModel } from "../models/feedback.model";
-import { ErrorHandlerService } from "./error-handler.service";
+import { FeedbackModel } from "../../models/feedback.model";
+import { ErrorHandlerService } from "../error-handler/error-handler.service";
 import { catchError } from "rxjs";
-import { Text } from "../statics/text";
+import { Text } from "../../statics/text";
 
 
 @Injectable({

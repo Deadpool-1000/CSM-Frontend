@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { TicketService } from '../../services/tickets.services';
+import { TicketService } from '../../services/tickets/tickets.services';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';

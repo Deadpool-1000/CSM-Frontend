@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { UserModel } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { Subscription, take, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { Text } from '../../statics/text';
-import { LoadingService } from '../../services/loading.service';
+import { LoadingService } from '../../services/loading/loading.service';
 
 @Component({
   selector: 'app-header',

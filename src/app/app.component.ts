@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
-import { LoadingService } from './services/loading.service';
+import { AuthService } from './services/auth/auth.service';
+import { LoadingService } from './services/loading/loading.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit , OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.authService.clearExpirationTimer();
-    this.loadingServiceSubscription.unsubscribe();
+    if(this.authService) this.authService?.clearExpirationTimer();
+    if(this.loadingService) this.loadingServiceSubscription?.unsubscribe();
   }
 }

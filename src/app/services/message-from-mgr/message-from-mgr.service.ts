@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { MgrFeedbackModel } from "../models/feedback.model";
+import { MgrFeedbackModel } from "../../models/feedback.model";
 import { catchError } from "rxjs";
-import { ErrorHandlerService } from "./error-handler.service";
-import { Text } from "../statics/text";
+import { ErrorHandlerService } from "../error-handler/error-handler.service";
+import { Text } from "../../statics/text";
 
 
 

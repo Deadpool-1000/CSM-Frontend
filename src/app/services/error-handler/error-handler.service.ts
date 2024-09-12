@@ -2,7 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { throwError } from "rxjs";
-import { ErrorModel } from "../models/error.model";
+import { ErrorModel } from "../../models/error.model";
 
 
 @Injectable({

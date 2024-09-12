@@ -7,7 +7,7 @@
             <div class="alert alert-info" *ngIf="message">
                 {{message}}
             </div>
-            <form action="" #f="ngForm" (ngSubmit)="handleLogin(f)">
+            <form #f="ngForm" (ngSubmit)="handleLogin(f)">
                 <div class="mb-3">
                     <input type="email" class="form-control" name="email"  placeholder="Email" ngModel required email #email="ngModel"/>
                     <div class="invalid-message" *ngIf="email.invalid && (email.dirty || email.touched)">

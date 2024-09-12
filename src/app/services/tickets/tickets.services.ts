@@ -1,13 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { TicketDetailModel } from "../models/ticket.model";
-import { ErrorHandlerService } from "./error-handler.service";
+import { TicketDetailModel } from "../../models/ticket.model";
+import { ErrorHandlerService } from "../error-handler/error-handler.service";
 import { catchError, forkJoin, Observable, of } from "rxjs";
-import { FeedbackService } from "./feedback.service";
-import { MessageFromMgrService } from "./message-from-mgr.service";
+import { FeedbackService } from "../feedback/feedback.service";
+import { MessageFromMgrService } from "../message-from-mgr/message-from-mgr.service";
 import { map, mergeMap } from "rxjs/operators"
-import { AuthService } from "./auth.service";
-import { Text } from "../statics/text";
+import { AuthService } from "../auth/auth.service";
+import { Text } from "../../statics/text";
 
 
 @Injectable({

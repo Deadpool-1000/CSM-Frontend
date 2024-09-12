@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MessageFromMgrService } from '../../services/message-from-mgr.service';
+import { MessageFromMgrService } from '../../services/message-from-mgr/message-from-mgr.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TicketModel } from '../../models/ticket.model';

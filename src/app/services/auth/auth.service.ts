@@ -1,13 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from "rxjs/operators";
-import { TokenService } from "./token.service";
+import { TokenService } from "../token/token.service";
 import { BehaviorSubject } from "rxjs";
-import { StorageService } from "./storage.service";
-import { UserModel } from "../models/user.model";
+import { StorageService } from "../storage/storage.service";
+import { UserModel } from "../../models/user.model";
 import { Router } from "@angular/router";
-import { ErrorHandlerService } from "./error-handler.service";
-import { Text } from "../statics/text";
+import { ErrorHandlerService } from "../error-handler/error-handler.service";
+import { Text } from "../../statics/text";
 import { MessageService } from "primeng/api";
 
 
@@ -20,7 +20,6 @@ export class AuthService {
 
     tokenExpirationTimer: any;
     constructor(private http: HttpClient, private tokenService: TokenService, private storageService: StorageService, private router: Router, private errorHandler: ErrorHandlerService, private messageService: MessageService) { }
-
 
     login(email: string, password: string, role: string) {
         return this.http.post<{ token: string, expiresIn: number }>(Text.LOGIN_URL, {
@@ -158,6 +157,5 @@ export class AuthService {
             )
         )
     }
-
 
 }

@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
-import { AuthService } from "../auth.service";
+import { AuthService } from "../auth/auth.service";
 import { map, take } from "rxjs/operators";
 import { MessageService } from "primeng/api";
 
@@ -8,7 +8,6 @@ export const isLoginGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state
     const authService = inject(AuthService);
     const router = inject(Router);
     const messageService = inject(MessageService);
-
     return authService.isLoggedIn.pipe(
         take(1),
         map(

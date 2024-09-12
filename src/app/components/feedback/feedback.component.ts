@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RatingModule } from 'primeng/rating';
-import { FeedbackService } from '../../services/feedback.service';
+import { FeedbackService } from '../../services/feedback/feedback.service';
 import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Text } from '../../statics/text';
@@ -46,7 +46,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.feedbackSubscription = this.feedbackService.registerFeedback(this.ticket_id, stars, description).subscribe({
-      error: error => {
+      error: (error:string) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
